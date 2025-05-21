@@ -25,14 +25,14 @@ type Client struct {
 	env          env
 	customerCode string
 	checkWord    string
-	httpClient   http.Client
+	httpClient   *http.Client
 }
 
-func NewClient(customerCode string, checkWord string, env env, httpclient ...http.Client) *Client {
-	var client http.Client
+func NewClient(customerCode string, checkWord string, env env, httpclient ...*http.Client) *Client {
+	var client *http.Client
 
 	if httpclient == nil {
-		client = http.Client{
+		client = &http.Client{
 			Timeout: time.Second * 10,
 		}
 	} else {
@@ -92,4 +92,8 @@ func (c *Client) GetRequestUrl() string {
 	default:
 		return "https://sfapi-sbox.sf-express.com/std/service"
 	}
+}
+
+func (c *Client) GetEnv() env {
+	return c.env
 }
